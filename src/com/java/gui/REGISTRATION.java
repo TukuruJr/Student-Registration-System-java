@@ -52,6 +52,9 @@ public class REGISTRATION implements ActionListener{
     private JButton btnRegister,btnUpdateInfo,btnDelete,btnClear; 
     private Connection conn;
     private PreparedStatement pst;
+    private JLabel lblfrancode;
+    private JLabel lblSearchStudentAdm;
+    private JTextField search;
 
 	/**
 	 * Launch the application.
@@ -330,9 +333,30 @@ public class REGISTRATION implements ActionListener{
 			}
 		});
 		table.setForeground(new Color(0, 255, 51));
-		table.setBackground(new Color(204, 51, 102));
+		table.setBackground(new Color(0, 0, 51));
 		table.setBounds(12, 516, 801, 196);
 		frame.getContentPane().add(table);
+		
+		lblfrancode = new JLabel("@francode");
+		lblfrancode.setFont(new Font("Z003", Font.BOLD | Font.ITALIC, 16));
+		lblfrancode.setForeground(new Color(51, 255, 51));
+		lblfrancode.setBounds(35, 12, 97, 27);
+		frame.getContentPane().add(lblfrancode);
+		
+		lblSearchStudentAdm = new JLabel("SEARCH STUDENT:  ADM");
+		lblSearchStudentAdm.setForeground(new Color(255, 255, 255));
+		lblSearchStudentAdm.setBounds(124, 489, 180, 15);
+		frame.getContentPane().add(lblSearchStudentAdm);
+		
+		search = new JTextField();
+		search.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
+		search.setBackground(new Color(51, 51, 0));
+		search.setForeground(new Color(255, 51, 0));
+		search.addActionListener(this);
+		search.setBounds(322, 487, 254, 27);
+		frame.getContentPane().add(search);
+	
+		search.setColumns(10);
 	}
 	
 	
@@ -397,8 +421,8 @@ public class REGISTRATION implements ActionListener{
 				int success = pst.executeUpdate();
 				if(success>0) {
 					//success
-					JOptionPane.showMessageDialog(frame, "Student Registered Successfully!!");
 					LoadTable();
+					JOptionPane.showMessageDialog(frame, "Student Registered Successfully!!");
 				}
 				}
 			} catch (SQLException e) {
@@ -443,8 +467,8 @@ public class REGISTRATION implements ActionListener{
 				int success = pst.executeUpdate();
 				if(success>0) {
 					//success
-					JOptionPane.showMessageDialog(frame, "Student Info Updated Successfully!!");
 					LoadTable();
+					JOptionPane.showMessageDialog(frame, "Student Info Updated Successfully!!");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -481,6 +505,24 @@ public class REGISTRATION implements ActionListener{
 			
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		else if(ev.getSource().equals(search)) {
+			try {
+				Connect();
+					pst = conn.prepareStatement("select * from students where adm=?");
+					pst.setString(1, search.getText());
+					if(pst.executeQuery().next()) {
+						JOptionPane.showMessageDialog(frame, "Student Not Registered ","Register error",JOptionPane.WARNING_MESSAGE);
+					table.setModel(DbUtils.resultSetToTableModel(pst.executeQuery()));}
+					else {
+						JOptionPane.showMessageDialog(frame, "Student Not Registered ","Register error",JOptionPane.WARNING_MESSAGE);
+					}
+			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
