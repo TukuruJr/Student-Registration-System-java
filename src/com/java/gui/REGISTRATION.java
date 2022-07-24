@@ -517,7 +517,6 @@ public class REGISTRATION implements ActionListener{
 					pst = conn.prepareStatement("select * from students where adm=?");
 					pst.setString(1, search.getText());
 					if(pst.executeQuery().next()) {
-						JOptionPane.showMessageDialog(frame, "Student Not Registered ","Register error",JOptionPane.WARNING_MESSAGE);
 					table.setModel(DbUtils.resultSetToTableModel(pst.executeQuery()));}
 					else {
 						JOptionPane.showMessageDialog(frame, "Student Not Registered ","Register error",JOptionPane.WARNING_MESSAGE);
